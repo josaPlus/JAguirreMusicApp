@@ -11,5 +11,5 @@ interface AlbumService {
 
     // OBTENER ALBUM POR ID
     @GET("api/albums/{id}")
-    suspend fun getAlbumById(@Path("id") id: Int): Album
+    suspend fun getAlbumById(@Path("id") id: String): Album
 }
