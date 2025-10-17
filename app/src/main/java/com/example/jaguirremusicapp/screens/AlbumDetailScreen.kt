@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,11 +23,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.jaguirremusicapp.components.AlbumArt
 import com.example.jaguirremusicapp.components.AlbumInfo
+import com.example.jaguirremusicapp.components.ListaAlbums
 import com.example.jaguirremusicapp.models.Album
 import com.example.jaguirremusicapp.services.AlbumService
 import com.example.jaguirremusicapp.ui.theme.JAguirreMusicAppTheme
@@ -34,22 +41,31 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun AlbumDetailScreen(id: String) {
+fun AlbumDetailScreen(id: String, navController: NavController) {
+    // Estado para el álbum individual (se queda igual)
     var album by remember { mutableStateOf<Album?>(null) }
     var loading by remember { mutableStateOf(true) }
+
+    // --- 2. AÑADIMOS NUEVO ESTADO PARA LA LISTA DE ÁLBUMES ---
+    var allAlbums by remember { mutableStateOf(listOf<Album>()) }
 
     LaunchedEffect(key1 = id) {
         try {
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://music.juanfrausto.com/") // Base URL
+                .baseUrl("https://music.juanfrausto.com/") // La URL base correcta
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
             val service = retrofit.create(AlbumService::class.java)
-            val result = withContext(Dispatchers.IO) { service.getAlbumById(id) }
-            album = result
+
+            // Hacemos las dos llamadas a la API
+            val resultAlbum = withContext(Dispatchers.IO) { service.getAlbumById(id) }
+            val resultAllAlbums = withContext(Dispatchers.IO) { service.getAllAlbums() } // <-- 3. LLAMADA PARA TODOS LOS ÁLBUMES
+
+            album = resultAlbum
+            allAlbums = resultAllAlbums // <-- 4. GUARDAMOS LA LISTA EN EL ESTADO
         } catch (e: Exception) {
-            Log.e("AlbumDetailScreen", "Error fetching album details: ${e.message}")
+            Log.e("AlbumDetailScreen", "Error fetching details: ${e.message}")
         } finally {
             loading = false
         }
@@ -58,32 +74,43 @@ fun AlbumDetailScreen(id: String) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 35.dp)
             .background(Color(0xFFF0F0F7))
     ) {
         if (loading) {
-            item {
-                Box(
-                    modifier = Modifier.fillParentMaxSize(), // Fills the whole screen
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+            // ... (tu código de carga se queda igual)
         } else if (album != null) {
             item {
                 AlbumArt(album = album!!)
             }
-
             item {
                 AlbumInfo(album = album!!)
             }
 
+            // --- 5. AÑADIMOS LA LISTA DE ÁLBUMES A LA UI ---
+            item {
+                // Un pequeño título para la sección
+                Text(
+                    text = "More Albums",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, bottom = 8.dp)
+                )
+            }
 
-
+            //Usamos 'items' para crear una fila por cada álbum en nuestra lista 'allAlbums'
+            items(allAlbums) { albumFromList ->
+                ListaAlbums(
+                    album = albumFromList,
+                    onClick = {
+                        // Al hacer clic, navega a la pantalla de detalle de ese álbum
+                        navController.navigate(AlbumDetailScreenRoute(id = albumFromList.id))
+                    }
+                )
+            }
         }
     }
 }
+
 
 @Preview(
     showBackground = true,
@@ -93,6 +120,7 @@ fun AlbumDetailScreen(id: String) {
 @Composable
 fun AlbumDetailScreenPreview(){
     JAguirreMusicAppTheme {
-        AlbumDetailScreen("prueba")
+        val navController = rememberNavController()
+        AlbumDetailScreen("prueba", navController)
     }
 }
