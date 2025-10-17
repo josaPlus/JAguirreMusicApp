@@ -27,26 +27,34 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.jaguirremusicapp.models.Album
 import com.example.jaguirremusicapp.ui.theme.JAguirreMusicAppTheme
+import android.util.Log
+import androidx.compose.foundation.clickable
 
 @Composable
-fun ListaAlbums(album: Album){
+fun ListaAlbums(album: Album, onClick: () -> Unit){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 8.dp)
+            .clickable{onClick()},
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(0.dp) // Sin sombra
+        elevation = CardDefaults.cardElevation(0.dp),
+
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+
         ) {
             // Imagen del álbum
             AsyncImage(
                 model = album.image,
                 contentDescription = album.title,
                 contentScale = ContentScale.Crop,
+                onError = { error ->
+                    Log.e("CoilError", "Error al cargar imagen: ${album.image}, Razón: ${error.result.throwable}")
+                },
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(12.dp))
@@ -97,6 +105,6 @@ fun ListaAlbumPreview(){
             description = "Descripción para la vista previa.",
             image = "" // URL vacía para que AsyncImage no cargue nada
         )
-        ListaAlbums(sampleAlbum)
+        ListaAlbums(sampleAlbum, {})
     }
 }

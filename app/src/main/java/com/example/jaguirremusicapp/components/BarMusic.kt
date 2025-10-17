@@ -40,7 +40,7 @@ fun BarMusic(currentAlbum: Album) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = currentAlbum.image, // <-- USA LA IMAGEN DEL ÁLBUM
+                model = currentAlbum.image,
                 contentDescription = currentAlbum.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

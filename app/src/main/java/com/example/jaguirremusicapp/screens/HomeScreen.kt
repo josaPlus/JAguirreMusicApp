@@ -63,8 +63,6 @@ fun HomeScreen(navController: NavController){
     var albums by remember { mutableStateOf(listOf<Album>()) }
     var loading by remember { mutableStateOf(true) }
 
-//    var currentlyPlayingAlbum by remember { mutableStateOf<Album?>(null) }
-
     LaunchedEffect(true) {
         try {
             val retrofit = Retrofit.Builder()
@@ -127,7 +125,7 @@ fun HomeScreen(navController: NavController){
                 }
 
                 items(albums){ album ->
-                    ListaAlbums(album)
+                    ListaAlbums(album, {navController.navigate(AlbumDetailScreenRoute(album.id))})
                 }
             }
 
