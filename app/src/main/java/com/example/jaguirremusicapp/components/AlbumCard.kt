@@ -2,6 +2,7 @@ package com.example.jaguirremusicapp.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,10 +45,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun AlbumCard(album: Album){
+fun AlbumCard(album: Album, onClick: () -> Unit){
 
     Card(
-        modifier = Modifier.size(160.dp),
+        modifier = Modifier.size(160.dp)
+            .clickable{onClick()},
         shape = RoundedCornerShape(24.dp)
     ) {
         Box(
@@ -118,6 +120,6 @@ fun AlbumCardPrevies(){
             description = "Descripción para la vista previa.",
             image = "" // URL vacía para que AsyncImage no cargue nada
         )
-        AlbumCard(sampleAlbum)
+        AlbumCard(sampleAlbum, {})
     }
 }

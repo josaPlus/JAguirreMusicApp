@@ -97,7 +97,7 @@ fun HomeScreen(navController: NavController){
         }else{
 
             // CAROUSEL DE ALBUMS
-            CarouselAlbum()
+            CarouselAlbum(navController)
 
             // ALBUMS EN LISTA DESPLAZABLE
             LazyColumn(

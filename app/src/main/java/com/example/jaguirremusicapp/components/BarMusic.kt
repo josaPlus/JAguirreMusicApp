@@ -30,7 +30,6 @@ import com.example.jaguirremusicapp.models.Album
 fun BarMusic(currentAlbum: Album) {
     val darkPurple = Color(0xFF2E0D4E)
     Card(
-        // Solo redondeamos las esquinas superiores
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         colors = CardDefaults.cardColors(containerColor = darkPurple),
         modifier = Modifier.fillMaxWidth()
@@ -55,7 +54,6 @@ fun BarMusic(currentAlbum: Album) {
                 Text("Tales of Ithiria", color = Color.White, fontWeight = FontWeight.Bold)
                 Text("Haggard", color = Color.White.copy(alpha = 0.7f))
             }
-            // Botón de Play
             Box(
                 modifier = Modifier
                     .size(40.dp)

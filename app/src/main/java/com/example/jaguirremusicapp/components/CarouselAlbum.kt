@@ -23,7 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.jaguirremusicapp.models.Album
+import com.example.jaguirremusicapp.screens.AlbumDetailScreenRoute
 import com.example.jaguirremusicapp.services.AlbumService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,12 +33,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun CarouselAlbum(){
+fun CarouselAlbum(navController: NavController){
 
     val BASE_URL = "https://music.juanfrausto.com/"
     var albums by remember { mutableStateOf(listOf<Album>()) }
 
-    // 2. LaunchedEffect se ejecuta UNA SOLA VEZ cuando el componente entra en pantalla.
     LaunchedEffect(key1 = true) {
         try {
             val retrofit = Retrofit.Builder()
@@ -45,7 +46,6 @@ fun CarouselAlbum(){
                 .build()
 
             val service = retrofit.create(AlbumService::class.java)
-            // Se ejecuta en un hilo secundario para no bloquear la UI
             val result = withContext(Dispatchers.IO) { service.getAllAlbums() }
             albums = result
         } catch (e: Exception) {
@@ -68,7 +68,7 @@ fun CarouselAlbum(){
             )
             Text(
                 text = "See more",
-                color = Color(0xFF673AB7), // Un color púrpura
+                color = Color(0xFF673AB7),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.clickable {  }
             )
@@ -80,7 +80,7 @@ fun CarouselAlbum(){
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(albums){ album ->
-                AlbumCard(album)
+                AlbumCard(album, {navController.navigate(AlbumDetailScreenRoute(album.id))})
             }
         }
     }

@@ -42,11 +42,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun AlbumDetailScreen(id: String, navController: NavController) {
-    // Estado para el álbum individual (se queda igual)
     var album by remember { mutableStateOf<Album?>(null) }
     var loading by remember { mutableStateOf(true) }
 
-    // --- 2. AÑADIMOS NUEVO ESTADO PARA LA LISTA DE ÁLBUMES ---
     var allAlbums by remember { mutableStateOf(listOf<Album>()) }
 
     LaunchedEffect(key1 = id) {
@@ -58,12 +56,11 @@ fun AlbumDetailScreen(id: String, navController: NavController) {
 
             val service = retrofit.create(AlbumService::class.java)
 
-            // Hacemos las dos llamadas a la API
             val resultAlbum = withContext(Dispatchers.IO) { service.getAlbumById(id) }
             val resultAllAlbums = withContext(Dispatchers.IO) { service.getAllAlbums() } // <-- 3. LLAMADA PARA TODOS LOS ÁLBUMES
 
             album = resultAlbum
-            allAlbums = resultAllAlbums // <-- 4. GUARDAMOS LA LISTA EN EL ESTADO
+            allAlbums = resultAllAlbums
         } catch (e: Exception) {
             Log.e("AlbumDetailScreen", "Error fetching details: ${e.message}")
         } finally {
@@ -77,7 +74,6 @@ fun AlbumDetailScreen(id: String, navController: NavController) {
             .background(Color(0xFFF0F0F7))
     ) {
         if (loading) {
-            // ... (tu código de carga se queda igual)
         } else if (album != null) {
             item {
                 AlbumArt(album = album!!)
@@ -86,9 +82,7 @@ fun AlbumDetailScreen(id: String, navController: NavController) {
                 AlbumInfo(album = album!!)
             }
 
-            // --- 5. AÑADIMOS LA LISTA DE ÁLBUMES A LA UI ---
             item {
-                // Un pequeño título para la sección
                 Text(
                     text = "More Albums",
                     style = MaterialTheme.typography.titleLarge,
@@ -97,12 +91,10 @@ fun AlbumDetailScreen(id: String, navController: NavController) {
                 )
             }
 
-            //Usamos 'items' para crear una fila por cada álbum en nuestra lista 'allAlbums'
             items(allAlbums) { albumFromList ->
                 ListaAlbums(
                     album = albumFromList,
                     onClick = {
-                        // Al hacer clic, navega a la pantalla de detalle de ese álbum
                         navController.navigate(AlbumDetailScreenRoute(id = albumFromList.id))
                     }
                 )

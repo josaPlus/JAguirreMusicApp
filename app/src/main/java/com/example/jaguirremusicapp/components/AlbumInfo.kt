@@ -22,12 +22,10 @@ import com.example.jaguirremusicapp.ui.theme.JAguirreMusicAppTheme
 
 @Composable
 fun AlbumInfo(album: Album) {
-    // A Column to arrange the two parts vertically
     Column (
         modifier = Modifier.padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp) // This adds space between them
     ) {
-        // --- Code from AlbumDescriptionCard ---
         Card(
             modifier = Modifier
                 .padding(horizontal = 16.dp), // Padding is now inside the items
@@ -50,7 +48,6 @@ fun AlbumInfo(album: Album) {
             }
         }
 
-        // --- Code from ArtistChip ---
         Card(
             modifier = Modifier
                 .padding(horizontal = 16.dp), // Padding is now inside the items

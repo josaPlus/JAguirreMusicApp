@@ -39,7 +39,6 @@ fun Header(){
                 .background(gradient)
                 .padding(20.dp)
         ) {
-            // Fila para los iconos superior e inferior
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -56,17 +55,15 @@ fun Header(){
                 )
             }
 
-            // Espacio entre los iconos y el texto
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Textos de saludo
             Text(
                 text = "Good Morning!",
                 color = Color.White,
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
-                text = "Juan Frausto",
+                text = "Josafat Aguirre",
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold

@@ -42,7 +42,7 @@ fun AlbumArt(album: Album) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp) // Altura considerable para la imagen
+            .height(400.dp)
             .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
     ) {
         // Imagen de fondo
@@ -66,7 +66,6 @@ fun AlbumArt(album: Album) {
                 )
         )
 
-        // Barra superior con botones de regreso y favorito
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,7 +81,6 @@ fun AlbumArt(album: Album) {
             }
         }
 
-        // Contenido principal sobre la imagen
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -101,14 +99,12 @@ fun AlbumArt(album: Album) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                // Botón de Play principal (morado)
                 Box(
                     modifier = Modifier.size(56.dp).clip(CircleShape).background(Color(0xFF673AB7)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(Icons.Default.PlayArrow, contentDescription = "Play", tint = Color.White, modifier = Modifier.size(32.dp))
                 }
-                // Botón de Play secundario (blanco)
                 Box(
                     modifier = Modifier.size(56.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.9f)),
                     contentAlignment = Alignment.Center
