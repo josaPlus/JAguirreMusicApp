@@ -41,7 +41,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun AlbumDetailScreen(id: String, navController: NavController) {
+fun AlbumDetailScreen(
+    id: String,
+    navController: NavController,
+    onSongClick: (Album) -> Unit = {}
+) {
     var album by remember { mutableStateOf<Album?>(null) }
     var loading by remember { mutableStateOf(true) }
 
@@ -95,6 +99,7 @@ fun AlbumDetailScreen(id: String, navController: NavController) {
                 ListaAlbums(
                     album = albumFromList,
                     onClick = {
+                        onSongClick(albumFromList)
                         navController.navigate(AlbumDetailScreenRoute(id = albumFromList.id))
                     }
                 )

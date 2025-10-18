@@ -22,18 +22,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.jaguirremusicapp.models.Album
 import com.example.jaguirremusicapp.screens.AlbumDetailScreenRoute
 import com.example.jaguirremusicapp.services.AlbumService
+import com.example.jaguirremusicapp.ui.theme.JAguirreMusicAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun CarouselAlbum(navController: NavController){
+fun CarouselAlbum(
+    navController: NavController,
+    onSongClick: (Album) -> Unit
+){
 
     val BASE_URL = "https://music.juanfrausto.com/"
     var albums by remember { mutableStateOf(listOf<Album>()) }
@@ -80,8 +86,20 @@ fun CarouselAlbum(navController: NavController){
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(albums){ album ->
-                AlbumCard(album, {navController.navigate(AlbumDetailScreenRoute(album.id))})
+                AlbumCard(album, {
+                    onSongClick(album)
+                    navController.navigate(AlbumDetailScreenRoute(album.id))
+                })
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun carousel(){
+    JAguirreMusicAppTheme {
+        val navController = rememberNavController()
+        CarouselAlbum(navController, {})
     }
 }

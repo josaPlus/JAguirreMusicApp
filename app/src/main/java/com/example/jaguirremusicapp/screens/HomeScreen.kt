@@ -57,7 +57,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(
+    navController: NavController,
+    onSongClick: (Album) -> Unit = {}
+){
 
     val BASE_URL = "https://music.juanfrausto.com/"
     var albums by remember { mutableStateOf(listOf<Album>()) }
@@ -97,7 +100,7 @@ fun HomeScreen(navController: NavController){
         }else{
 
             // CAROUSEL DE ALBUMS
-            CarouselAlbum(navController)
+            CarouselAlbum(navController, onSongClick)
 
             // ALBUMS EN LISTA DESPLAZABLE
             LazyColumn(
@@ -125,7 +128,12 @@ fun HomeScreen(navController: NavController){
                 }
 
                 items(albums){ album ->
-                    ListaAlbums(album, {navController.navigate(AlbumDetailScreenRoute(album.id))})
+                    ListaAlbums(
+                        album, {
+                            onSongClick(album)
+                            navController.navigate(AlbumDetailScreenRoute(album.id))
+                        }
+                    )
                 }
             }
 

@@ -22,15 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.jaguirremusicapp.models.Album
+import com.example.jaguirremusicapp.ui.theme.JAguirreMusicAppTheme
 
 @Composable
 fun BarMusic(currentAlbum: Album) {
     val darkPurple = Color(0xFF2E0D4E)
     Card(
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = darkPurple),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -69,5 +71,13 @@ fun BarMusic(currentAlbum: Album) {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun barra(){
+    JAguirreMusicAppTheme {
+        BarMusic(Album("1", "sds", "aas", "sdsds", "dhdh"))
     }
 }
